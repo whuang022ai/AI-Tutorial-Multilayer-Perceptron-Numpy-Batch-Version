@@ -45,45 +45,45 @@ class MLP():
         return mse
 
     def backward(self, D):
-        activate_function_d=np.vectorize(self.sigmoid_d)
-        deltaO=-1*(D-self.O)
-        self.dO=(deltaO)*activate_function_d(self.O)
-        dtmpH=np.dot(self.dO, np.transpose(self.WHO))
-        dtmpH=dtmpH[:, 1:]
-        H=self.H[:, 1:]
-        self.dH=dtmpH*activate_function_d(H)
+        activate_function_d = np.vectorize(self.sigmoid_d)
+        deltaO = -1*(D-self.O)
+        self.dO = (deltaO)*activate_function_d(self.O)
+        dtmpH = np.dot(self.dO, np.transpose(self.WHO))
+        dtmpH = dtmpH[:, 1:]
+        H = self.H[:, 1:]
+        self.dH = dtmpH*activate_function_d(H)
         return deltaO
 
     def update_value_calculation(self):
-        self.dWHO=np.dot(np.transpose(self.H), self.dO)
-        self.dWIH=np.dot(np.transpose(self.X), self.dH)
+        self.dWHO = np.dot(np.transpose(self.H), self.dO)
+        self.dWIH = np.dot(np.transpose(self.X), self.dH)
         return
 
     def update_fullbatch(self, lr):
-        self.WHO=self.WHO-lr*self.dWHO
-        self.WIH=self.WIH-lr*self.dWIH
+        self.WHO = self.WHO-lr*self.dWHO
+        self.WIH = self.WIH-lr*self.dWIH
         return
 
     def test_forward(self):
         while (True):
             # get input
-            input_data=np.arange(self.input_size+1)
+            input_data = np.arange(self.input_size+1)
             for x in range(self.input_size):
-                input_data[x]=float(input('Enter the feature: '))
-            input_data[self.input_size]=1
+                input_data[x] = float(input('Enter the feature: '))
+            input_data[self.input_size] = 1
             # same process as forward
-            self.sumIH=np.dot(input_data, self.WIH)  # sum = XW
-            activate_function=np.vectorize(self.sigmoid)
-            self.H=activate_function(self.sumIH)  # H = sigmoid(sum)
-            self.H=np.append(self.H, [[1.0]])
-            self.sumHO=np.dot(self.H, self.WHO)  # sum = HW
-            self.O=activate_function(self.sumHO)  # O = sigmoid(sum)
+            self.sumIH = np.dot(input_data, self.WIH)  # sum = XW
+            activate_function = np.vectorize(self.sigmoid)
+            self.H = activate_function(self.sumIH)  # H = sigmoid(sum)
+            self.H = np.append(self.H, [[1.0]])
+            self.sumHO = np.dot(self.H, self.WHO)  # sum = HW
+            self.O = activate_function(self.sumHO)  # O = sigmoid(sum)
             print(self.O)
 
 
 if __name__ == "__main__":
-    mlp=MLP(2, 4, 5, 1)
-    X=np.array(
+    mlp = MLP(2, 4, 5, 1)
+    X = np.array(
         [
             [0.0, 0.0],
             [0.0, 1.0],
@@ -92,7 +92,7 @@ if __name__ == "__main__":
         ]
     )
 
-    D=np.array(
+    D = np.array(
         [
             [0.0],
             [1.0],
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     )
     for i in range(4000):
         mlp.forward(X)
-        mse=mlp.meansure_error_mse(D)
+        mse = mlp.meansure_error_mse(D)
         mlp.backward(D)
         mlp.update_value_calculation()
         mlp.update_fullbatch(1.5)
