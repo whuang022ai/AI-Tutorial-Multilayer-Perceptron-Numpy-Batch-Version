@@ -80,7 +80,27 @@ class MLP():
             self.O = activate_function(self.sumHO)  # O = sigmoid(sum)
             print(self.O)
 
+    def save_model(self,file_name):
+        network_setting=np.zeros(4)
+        network_setting[0]=self.input_size
+        network_setting[1]= self.batch_size
+        network_setting[2]=self.hidden_size
+        network_setting[3]=self.output_size
+        np.savetxt(file_name+'_config.txt',  network_setting)
+        np.savetxt(file_name+'_WIH.txt', self.WIH)
+        np.savetxt(file_name+'_WHO.txt', self.WHO)
+        return
 
+    def load_model(self,file_name):
+        network_setting=np.loadtxt(file_name+'_config.txt')
+        self.input_size=int(network_setting[0])
+        self.batch_size=int(network_setting[1])
+        self.hidden_size=int(network_setting[2])
+        self.output_size=int(network_setting[3])
+        self.WIH=np.loadtxt(file_name+'_WIH.txt')
+        self.WHO=np.loadtxt(file_name+'_WHO.txt')
+        return
+        
 if __name__ == "__main__":
     mlp = MLP(2, 4, 5, 1)
     X = np.array(
@@ -108,4 +128,5 @@ if __name__ == "__main__":
         mlp.update_fullbatch(1.5)
         if(i % 100 == 0):
             print(mse)
+    mlp.save_model('xor')
     mlp.test_forward()
