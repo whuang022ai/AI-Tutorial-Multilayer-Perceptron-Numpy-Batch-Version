@@ -7,6 +7,47 @@
 #
 
 import numpy as np
+import math
+from abc import ABCMeta, abstractmethod
+
+
+class Activate_Function(metaclass=ABCMeta):
+
+    @abstractmethod
+    def f(self, x):
+        pass
+
+    @abstractmethod
+    def df(self, y):
+        pass
+
+
+class Activate_Function_Sigmoid(Activate_Function):
+
+    def f(self, x):
+        return 1 / (1 + np.exp(-x))
+
+    def df(self, y):
+        return y*(1-y)
+
+
+class Activate_Function_Tanh(Activate_Function):
+
+    def f(self, x):
+        return np.tanh(x)
+
+    def df(self, y):
+        return 1-y**2
+
+
+class Activate_Function_Generator():
+
+    def __init__(self, name):
+
+        if name == 'sigmoid':
+            self.get = Activate_Function_Sigmoid()
+        elif name == 'tanh':
+            self.get = Activate_Function_Tanh()
 
 
 class MLP():
@@ -24,16 +65,11 @@ class MLP():
     def colum_add_ones(self, x):
         return np.hstack((x, np.ones((x.shape[0], 1), dtype=x.dtype)))
 
-    def sigmoid(self, x):
-        return 1 / (1 + np.exp(-x))
-
-    def sigmoid_d(self, y):
-        return y*(1-y)
-
     def forward(self, X):
         self.X = self.colum_add_ones(X)
         self.sumIH = np.dot(self.X, self.WIH)  # sum = XW
-        activate_function = np.vectorize(self.sigmoid)
+        act = Activate_Function_Generator('sigmoid').get
+        activate_function = np.vectorize(act.f)
         self.H = activate_function(self.sumIH)  # H = sigmoid(sum)
         self.H = self.colum_add_ones(self.H)
         self.sumHO = np.dot(self.H, self.WHO)  # sum = HW
@@ -45,7 +81,8 @@ class MLP():
         return mse
 
     def backward(self, D):
-        activate_function_d = np.vectorize(self.sigmoid_d)
+        act = Activate_Function_Generator('sigmoid').get
+        activate_function_d = np.vectorize(act.df)
         deltaO = -1*(D-self.O)
         self.dO = (deltaO)*activate_function_d(self.O)
         dtmpH = np.dot(self.dO, np.transpose(self.WHO))
@@ -73,7 +110,8 @@ class MLP():
             input_data[self.input_size] = 1
             # same process as forward
             self.sumIH = np.dot(input_data, self.WIH)  # sum = XW
-            activate_function = np.vectorize(self.sigmoid)
+            act = Activate_Function_Generator('sigmoid').get
+            activate_function = np.vectorize(act.f)
             self.H = activate_function(self.sumIH)  # H = sigmoid(sum)
             self.H = np.append(self.H, [[1.0]])
             self.sumHO = np.dot(self.H, self.WHO)  # sum = HW
