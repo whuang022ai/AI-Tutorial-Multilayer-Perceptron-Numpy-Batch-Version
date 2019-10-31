@@ -9,6 +9,11 @@ This is a 3 layer MLP Neural Network using only Numpy that can help us understan
 python mlp.py
 ```
 
+## Example Network Architecture
+
+![image](./img/mlp.jpg)
+
+
 ## Output Example
 
 ![image](./img/example.png)
