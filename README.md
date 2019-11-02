@@ -18,6 +18,10 @@ python mlp.py
 
 ![image](./img/example.png)
 
+## Activate Function Plot
+
+![image](./img/act_fun_plot.png)
+
 ## MSE Plot
 
 ![image](./img/MLP01.png)

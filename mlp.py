@@ -180,6 +180,7 @@ class MLP():
             # same process as forward
             self.sumIH = np.dot(input_data, self.WIH)  # sum = XW
             act = Activate_Function_Generator('sigmoid').get
+            # act.show_plot()
             activate_function = np.vectorize(act.f)
             self.H = activate_function(self.sumIH)  # H = sigmoid(sum)
             self.H = np.append(self.H, [[1.0]])
