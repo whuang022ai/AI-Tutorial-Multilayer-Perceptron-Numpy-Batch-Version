@@ -39,17 +39,19 @@ class Activate_Function_Tanh(Activate_Function):
     def df(self, y):
         return 1-y**2
 
+
 class Activate_Function_Relu(Activate_Function):
 
     def __init__(self):
         self.lrelu = Activate_Function_LeakyRelu()
-        self.lrelu.alpha=0.0
+        self.lrelu.alpha = 0.0
 
     def f(self, x):
         return self.lrelu.f(x)
 
     def df(self, y):
         return self.lrelu.df(y)
+
 
 class Activate_Function_LeakyRelu(Activate_Function):
 
@@ -67,6 +69,7 @@ class Activate_Function_LeakyRelu(Activate_Function):
             return 1.0
         else:
             return self.alpha
+
 
 class Activate_Function_Generator():
 
@@ -173,7 +176,7 @@ class MLP():
 
 
 if __name__ == "__main__":
-    
+
     # leaky-relu recommand setting for xor : epoh=200 , lr =0.07 , act.alpha=0.2
 
     mlp = MLP(2, 4, 5, 1)
