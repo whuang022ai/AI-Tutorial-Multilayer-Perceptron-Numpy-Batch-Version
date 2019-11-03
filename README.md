@@ -22,6 +22,6 @@ python mlp.py
 
 ![image](./img/act_fun_plot.png)
 
-## MSE Plot
+## MSE Error Monitor
 
-![image](./img/MLP01.png)
+![image](./img/mse_error.png)

@@ -146,7 +146,10 @@ class MLP():
         return self.O
 
     def meansure_error_mse(self, D):
-        mse = np.square((D-self.O).mean())
+        mse = 0.0
+        for i in range(len(D)):
+            mse += (D[i]-self.O[i])**2
+        mse /= len(D)
         return mse
 
     def backward(self, D):
@@ -213,6 +216,7 @@ class MLP():
 if __name__ == "__main__":
 
     # leaky-relu recommand setting for xor : epoh=200 , lr =0.07 , act.alpha=0.2
+    draw_mse = True # display mse realtime
     mlp = MLP(2, 4, 5, 1)
     X = np.array(
         [
@@ -231,13 +235,28 @@ if __name__ == "__main__":
             [0.0]
         ]
     )
-    for i in range(4000):
+    epoh = 6000
+    if(draw_mse):
+        plt.figure('Neural Network MSE Error Monitor')
+        plt.axis([0, epoh, 0, 0.0001])
+        plt.draw()
+        plt.ion()
+        plt.autoscale(enable=True, axis='both')
+    for i in range(epoh):
         mlp.forward(X)
         mse = mlp.meansure_error_mse(D)
         mlp.backward(D)
         mlp.update_value_calculation()
-        mlp.update_fullbatch(1.5)
+        mlp.update_fullbatch(0.5)
         if(i % 100 == 0):
             print(mse)
+        if(i > epoh*0.1 and i % 10 == 0 and draw_mse):
+            plt.plot(i, mse, 'b*-', label="MSE")
+            plt.pause(0.01)
+        if(i > epoh*0.01 and mse < 0.01):
+            break
+    if(draw_mse):
+        plt.ioff()
+        plt.show(block=True)
     mlp.save_model('xor')
     mlp.test_forward()
