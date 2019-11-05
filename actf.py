@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#  Activate Function Model 
+#  Activate Function Model
 #
 #  @auth whuang022ai
 #
