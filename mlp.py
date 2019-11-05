@@ -9,6 +9,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from actf import Activate_Function_Generator
+from actf import Activate_Function_Type
+
 
 class MLP():
 
@@ -28,7 +30,7 @@ class MLP():
     def forward(self, X):
         self.X = self.colum_add_ones(X)
         self.sumIH = np.dot(self.X, self.WIH)  # sum = XW
-        act = Activate_Function_Generator('sigmoid').get
+        act = Activate_Function_Generator(Activate_Function_Type.sigmoid).get
         activate_function = np.vectorize(act.f)
         self.H = activate_function(self.sumIH)  # H = sigmoid(sum)
         self.H = self.colum_add_ones(self.H)
@@ -44,7 +46,7 @@ class MLP():
         return mse
 
     def backward(self, D):
-        act = Activate_Function_Generator('sigmoid').get
+        act = Activate_Function_Generator(Activate_Function_Type.sigmoid).get
         activate_function_d = np.vectorize(act.df)
         deltaO = -1*(D-self.O)
         self.dO = (deltaO)*activate_function_d(self.O)
@@ -73,7 +75,8 @@ class MLP():
             input_data[self.input_size] = 1
             # same process as forward
             self.sumIH = np.dot(input_data, self.WIH)  # sum = XW
-            act = Activate_Function_Generator('sigmoid').get
+            act = Activate_Function_Generator(
+                Activate_Function_Type.sigmoid).get
             # act.show_plot()
             activate_function = np.vectorize(act.f)
             self.H = activate_function(self.sumIH)  # H = sigmoid(sum)

@@ -4,10 +4,20 @@
 #
 #  @auth whuang022ai
 #
+
 import math
 import numpy as np
 from abc import ABCMeta, abstractmethod
 import matplotlib.pyplot as plt
+from enum import Enum
+
+
+class Activate_Function_Type(Enum):
+
+    sigmoid = 'sigmoid'
+    tanh = 'tanh'
+    relu = 'relu'
+    leaky_relu = 'leaky-relu'
 
 
 class Activate_Function(metaclass=ABCMeta):
@@ -106,6 +116,14 @@ class Activate_Function_LeakyRelu(Activate_Function):
 class Activate_Function_Generator():
 
     def __init__(self, name):
+
+        if isinstance(name, Activate_Function_Type):
+            name = str(name.value)
+            self.__genfromname(name)
+        else:
+            self.__genfromname(name)
+
+    def __genfromname(self, name):
 
         if name == 'sigmoid':
             self.get = Activate_Function_Sigmoid()
