@@ -150,8 +150,8 @@ if __name__ == "__main__":
     sample_size = 4
     output_size = 1
     hidden_size = 5
-    #epoh = 6000
-    #learing_rate = 0.8
+    # epoh = 6000
+    # learing_rate = 0.8
 
     # iris problem setting
     # input_size = 4
@@ -160,6 +160,7 @@ if __name__ == "__main__":
     # hidden_size = 5
     # epoh = 5000
     # learing_rate = 0.08
+    
     mlp = MLP(input_size, sample_size, hidden_size, output_size)
     F = np.genfromtxt('xor_dataset.csv', delimiter=',')
     spilt_colindex = input_size
