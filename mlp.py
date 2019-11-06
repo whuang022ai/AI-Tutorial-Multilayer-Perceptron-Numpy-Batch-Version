@@ -20,13 +20,15 @@ class MLP():
         self.batch_size = batch_size
         self.hidden_size = hidden_size
         self.output_size = output_size
-
         #self.WIH = np.random.rand(self.input_size+1, self.hidden_size)
         #self.WHO = np.random.rand(self.hidden_size+1, self.output_size)
-        a=pow(6/(self.input_size+1+self.hidden_size), 1/4)
-        self.WIH = np.random.uniform(-1*a,a,(self.input_size+1,self.hidden_size))
-        a=pow(6/(self.hidden_size+1+self.output_size), 1/4)
-        self.WHO = np.random.uniform(-1*a,a,(self.hidden_size+1,self.output_size))
+        # init by Xavier init x sigmoid
+        a = pow(6/(self.input_size+1+self.hidden_size), 1/4)
+        self.WIH = np.random.uniform(-1*a, a,
+                                     (self.input_size+1, self.hidden_size))
+        a = pow(6/(self.hidden_size+1+self.output_size), 1/4)
+        self.WHO = np.random.uniform(-1*a, a,
+                                     (self.hidden_size+1, self.output_size))
 
     def colum_add_ones(self, x):
         return np.hstack((x, np.ones((x.shape[0], 1), dtype=x.dtype)))
