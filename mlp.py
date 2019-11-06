@@ -111,12 +111,20 @@ if __name__ == "__main__":
 
     # leaky-relu recommand setting for xor : epoh=200 , lr =0.07 , act.alpha=0.2
     draw_mse = True  # display mse realtime
+    # xor problem setting
     input_size = 2
     sample_size = 4
     output_size = 1
     hidden_size = 5
     epoh = 6000
     learing_rate = 0.5
+    # iris problem setting
+    # input_size = 4
+    # sample_size = 4
+    # output_size = 1
+    # hidden_size = 5
+    # epoh = 5000
+    # learing_rate = 0.08
     mlp = MLP(input_size, sample_size, hidden_size, output_size)
     F = np.genfromtxt('xor_dataset.csv', delimiter=',')
     spilt_colindex = input_size
