@@ -111,12 +111,17 @@ if __name__ == "__main__":
 
     # leaky-relu recommand setting for xor : epoh=200 , lr =0.07 , act.alpha=0.2
     draw_mse = True  # display mse realtime
-    mlp = MLP(2, 4, 5, 1)
-    F = np.genfromtxt('xor_dataset.csv', delimiter=',')
-    spilt = 2
-    X = F[:, :spilt]
-    D = F[:, spilt:]
+    input_size = 2
+    sample_size = 4
+    output_size = 1
+    hidden_size = 5
     epoh = 6000
+    learing_rate = 0.5
+    mlp = MLP(input_size, sample_size, hidden_size, output_size)
+    F = np.genfromtxt('xor_dataset.csv', delimiter=',')
+    spilt_colindex = input_size
+    X = F[:, :spilt_colindex]
+    D = F[:, spilt_colindex:]
     if(draw_mse):
         plt.figure('Neural Network MSE Error Monitor')
         plt.axis([0, epoh, 0, 0.0001])
@@ -128,7 +133,7 @@ if __name__ == "__main__":
         mse = mlp.meansure_error_mse(D)
         mlp.backward(D)
         mlp.update_value_calculation()
-        mlp.update_fullbatch(0.5)
+        mlp.update_fullbatch(learing_rate)
         if(i % 100 == 0):
             print(mse)
         if(i > epoh*0.1 and i % 10 == 0 and draw_mse):
