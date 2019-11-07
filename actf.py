@@ -18,6 +18,7 @@ class Activate_Function_Type(Enum):
     tanh = 'tanh'
     relu = 'relu'
     leaky_relu = 'leaky-relu'
+    identity = 'identity'
 
 
 class Activate_Function(metaclass=ABCMeta):
@@ -53,9 +54,15 @@ class Activate_Function(metaclass=ABCMeta):
 
 
 class Activate_Function_Sigmoid(Activate_Function):
+    # ref: https://timvieira.github.io/blog/post/2014/02/11/exp-normalize-trick/
+    def f(self,x):
 
-    def f(self, x):
-        return 1 / (1 + np.exp(-x))
+        if x >= 0:
+            z = np.exp(-x)
+            return 1 / (1 + z)
+        else:
+            z = np.exp(x)
+            return z / (1 + z)
 
     def df(self, y):
         return y*(1-y)
@@ -113,6 +120,17 @@ class Activate_Function_LeakyRelu(Activate_Function):
         self.plot_fx_dfx(-5.0, 5.0, 0.01, 'The Leaky ReLU Function')
 
 
+class Activate_Function_Identity(Activate_Function):
+
+    def f(self, x):
+        return x
+
+    def df(self, y):
+        return 1.0
+
+    def show_plot(self):
+        self.plot_fx_dfx(-5.0, 5.0, 0.01, 'The Identity Function')
+
 class Activate_Function_Generator():
 
     def __init__(self, name):
@@ -133,3 +151,5 @@ class Activate_Function_Generator():
             self.get = Activate_Function_Relu()
         elif name == 'leaky-relu':
             self.get = Activate_Function_LeakyRelu()
+        elif name == 'identity':
+            self.get = Activate_Function_Identity()
