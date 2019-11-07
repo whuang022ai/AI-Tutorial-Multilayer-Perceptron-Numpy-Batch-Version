@@ -91,7 +91,7 @@ class MLP():
             self.O = activate_function(self.sumHO)  # O = sigmoid(sum)
             print(self.O)
 
-    def fit(self, X, D, epochs, learing_rate, draw_mse=False):
+    def fit(self, X, D, epochs, learing_rate, draw_mse=False, early_stopping=False):
         if(draw_mse):
             plt.figure('Neural Network MSE Error Monitor')
             plt.axis([0, epochs, 0, 0.0001])
@@ -109,7 +109,7 @@ class MLP():
             if(i > epochs*0.1 and i % 10 == 0 and draw_mse):
                 plt.plot(i, mse, 'b*-', label="MSE")
                 plt.pause(0.01)
-            if(i > epochs*0.01 and mse < 0.01):
+            if(i > epochs*0.01 and mse < 0.01 and early_stopping):
                 break
         if(draw_mse):
             plt.ioff()
@@ -162,6 +162,6 @@ if __name__ == "__main__":
     spilt_colindex = input_size
     X = F[:, :spilt_colindex]
     D = F[:, spilt_colindex:]
-    mlp.fit(X, D, epochs, learing_rate, True)
+    mlp.fit(X, D, epochs, learing_rate, True, True)
     mlp.save_model('xor')
     mlp.test_forward()
