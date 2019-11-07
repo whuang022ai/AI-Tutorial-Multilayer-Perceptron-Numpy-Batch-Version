@@ -139,7 +139,7 @@ class MLP():
 if __name__ == "__main__":
 
     # leaky-relu recommand setting for xor : epochs=200 , lr =0.07 , act.alpha=0.2
-    
+
     # xor problem setting
     input_size = 2
     sample_size = 4
@@ -147,8 +147,8 @@ if __name__ == "__main__":
     hidden_size = 5
     epochs = 6000
     learing_rate = 0.8
-    draw_mse=True
-    early_stopping=True
+    draw_mse = True
+    early_stopping = True
 
     # iris problem setting
     # input_size = 4
