@@ -47,7 +47,7 @@ class MLP():
     def meansure_error_mse(self, D):
         mse = 0.0
         for i in range(len(D)):
-            mse += (D[i]-self.O[i])**2
+            mse += ((D[i]-self.O[i])).mean()**2
         mse /= len(D)
         return mse
 
@@ -108,7 +108,7 @@ class MLP():
             if(i > epochs*0.1 and i % 10 == 0 and draw_mse):
                 plt.plot(i, mse, 'b*-', label="MSE")
                 plt.pause(0.01)
-            if(i > epochs*0.01 and mse < 0.01 and early_stopping):
+            if(i > epochs*0.01 and mse < 0.0001 and early_stopping):
                 break
         if(draw_mse):
             plt.ioff()
@@ -139,7 +139,7 @@ class MLP():
 if __name__ == "__main__":
 
     # leaky-relu recommand setting for xor : epochs=200 , lr =0.07 , act.alpha=0.2
-
+    
     # xor problem setting
     input_size = 2
     sample_size = 4
@@ -147,6 +147,8 @@ if __name__ == "__main__":
     hidden_size = 5
     epochs = 6000
     learing_rate = 0.8
+    draw_mse=True
+    early_stopping=True
 
     # iris problem setting
     # input_size = 4
@@ -156,11 +158,21 @@ if __name__ == "__main__":
     # epochs = 5000
     # learing_rate = 0.08
 
+    # iris 2 class one hot problem setting
+    # input_size = 4
+    # sample_size = 4
+    # output_size = 2
+    # hidden_size = 5
+    # epochs = 500
+    # learing_rate = 0.08
+    # draw_mse=True
+    # early_stopping=False
+
     mlp = MLP(input_size, sample_size, hidden_size, output_size)
     F = np.genfromtxt('xor_dataset.csv', delimiter=',')
     spilt_colindex = input_size
     X = F[:, :spilt_colindex]
     D = F[:, spilt_colindex:]
-    mlp.fit(X, D, epochs, learing_rate, True, True)
+    mlp.fit(X, D, epochs, learing_rate,  draw_mse, early_stopping)
     mlp.save_model('xor')
     mlp.test_forward()
