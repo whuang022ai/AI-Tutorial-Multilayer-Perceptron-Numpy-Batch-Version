@@ -15,11 +15,7 @@ from actf import Activate_Function_Type
 class MLP():
 
     def __init__(self, input_size, batch_size, hidden_size, output_size):
-        #
-        self.learing_rate = 0.8
-        self.epoh = 6000
-        self.draw_mse = True
-        #
+
         self.input_size = input_size
         self.batch_size = batch_size
         self.hidden_size = hidden_size
@@ -95,27 +91,27 @@ class MLP():
             self.O = activate_function(self.sumHO)  # O = sigmoid(sum)
             print(self.O)
 
-    def fit(self, X, D):
-        if(self.draw_mse):
+    def fit(self, X, D, epochs, learing_rate, draw_mse=False):
+        if(draw_mse):
             plt.figure('Neural Network MSE Error Monitor')
-            plt.axis([0, self.epoh, 0, 0.0001])
+            plt.axis([0, epochs, 0, 0.0001])
             plt.draw()
             plt.ion()
             plt.autoscale(enable=True, axis='both')
-        for i in range(self.epoh):
+        for i in range(epochs):
             self.forward(X)
             mse = self.meansure_error_mse(D)
             self.backward(D)
             self.update_value_calculation()
-            self.update_fullbatch(self.learing_rate)
+            self.update_fullbatch(learing_rate)
             if(i % 100 == 0):
                 print(mse)
-            if(i > self.epoh*0.1 and i % 10 == 0 and self.draw_mse):
+            if(i > epochs*0.1 and i % 10 == 0 and draw_mse):
                 plt.plot(i, mse, 'b*-', label="MSE")
                 plt.pause(0.01)
-            if(i > self.epoh*0.01 and mse < 0.01):
+            if(i > epochs*0.01 and mse < 0.01):
                 break
-        if(self.draw_mse):
+        if(draw_mse):
             plt.ioff()
             plt.show(block=True)
 
@@ -143,29 +139,29 @@ class MLP():
 
 if __name__ == "__main__":
 
-    # leaky-relu recommand setting for xor : epoh=200 , lr =0.07 , act.alpha=0.2
-    draw_mse = True  # display mse realtime
+    # leaky-relu recommand setting for xor : epochs=200 , lr =0.07 , act.alpha=0.2
+
     # xor problem setting
     input_size = 2
     sample_size = 4
     output_size = 1
     hidden_size = 5
-    # epoh = 6000
-    # learing_rate = 0.8
+    epochs = 6000
+    learing_rate = 0.8
 
     # iris problem setting
     # input_size = 4
     # sample_size = 4
     # output_size = 1
     # hidden_size = 5
-    # epoh = 5000
+    # epochs = 5000
     # learing_rate = 0.08
-    
+
     mlp = MLP(input_size, sample_size, hidden_size, output_size)
     F = np.genfromtxt('xor_dataset.csv', delimiter=',')
     spilt_colindex = input_size
     X = F[:, :spilt_colindex]
     D = F[:, spilt_colindex:]
-    mlp.fit(X, D)
+    mlp.fit(X, D, epochs, learing_rate, True)
     mlp.save_model('xor')
     mlp.test_forward()
